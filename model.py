@@ -2,11 +2,23 @@ import torch
 
 
 class RNN(torch.nn.Module):
-    def __init__():
-        return ""
+    def __init__(self, input_size, hidden_size, output_size):
+        super().__init__()
+        self.hidden_size = hidden_size
+        self.input_size = input_size
+        self.output_size = output_size
+        self.rnn = torch.nn.RNN(input_size, hidden_size, batch_first=True)
+        self.fc = torch.nn.Linear(hidden_size, output_size)
 
+    # x shape : [batch_size, sequence_length, input_size]
+    # hidden shape : [num_layers, batch_size, hidden_size]
     def forward(self, x, hidden):
-        return ""
+        output, hidden = self.rnn(x, hidden)
+        # output shape : [batch_size, sequence_length, hidden_size]
+        # hidden shape : [num_layers, batch_size, hidden_size]
+        output = self.fc(output[:, -1, :])
+        # output shape : [batch_size, output_size (vocab_size)]
+        return output, hidden
 
-    def init_hidden():
-        return ""
+    def init_hidden(self, batch_size):
+        return torch.zeros(1, batch_size, self.hidden_size)

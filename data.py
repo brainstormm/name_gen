@@ -16,27 +16,29 @@ for word in words:
 
 stoi = {ch: i for i, ch in enumerate(vocab)}
 itos = {i: ch for i, ch in enumerate(vocab)}
-stoi['<'] = len(vocab)
-stoi['>'] = len(vocab) + 1
-itos[len(vocab)] = '<'
-itos[len(vocab) + 1] = '>'
+stoi["<"] = len(vocab)
+stoi[">"] = len(vocab) + 1
+itos[len(vocab)] = "<"
+itos[len(vocab) + 1] = ">"
 
 
-X = []
-Y = []
+def enconde(s):
+    return [stoi[c] for c in s]
 
-for w in words:
-    w = "<" + w + ">"
-    for i in range(len(w) - sequence_length + 1):
-        X.append(w[i : i + sequence_length])
-        Y.append(w[i + 1 : i + sequence_length + 1])
 
-print(text)
-print(len(text))
-print(len(words))
-print(vocab)
-print(min_length, max_length)
-print(stoi)
-print(itos)
-print(X)
-print(Y)
+def decode(l):
+    return "".join(itos[i] for i in l)
+
+
+def get_data():
+    X, Y = [], []
+    for w in words:
+        w = "<" + w + ">"
+        for i in range(len(w) - sequence_length):
+            X.append(enconde(w[i : i + sequence_length]))
+            Y.append(enconde(w[i + 1 : i + sequence_length + 1]))
+    return X, Y
+
+
+def get_vocab_size():
+    return len(vocab) + 2

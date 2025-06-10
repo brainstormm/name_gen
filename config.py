@@ -8,6 +8,7 @@ epochs = 1000
 hidden_size = 32
 num_layers = 2
 learning_rate = 0.001
+input_size = 1  # The number of dimensions of the input vector. This is 1 because we are just encoding the characters as integers.
 
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print(f"Using device: {device}")
