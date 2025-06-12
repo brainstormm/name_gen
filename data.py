@@ -17,6 +17,11 @@
 # stoi = {ch: i for i, ch in enumerate(vocab)}
 # itos = {i: ch for i, ch in enumerate(vocab)}
 
+# stoi["<"] = len(vocab)
+# stoi[">"] = len(vocab) + 1
+# itos[len(vocab)] = "<"
+# itos[len(vocab) + 1] = ">"
+
 
 # def encode(s):
 #     return [stoi[c] for c in s]
@@ -29,6 +34,7 @@
 # def get_data():
 #     X, Y = [], []
 #     for w in words:
+#         w = "<" + w + ">"
 #         for i in range(len(w) - sequence_length):
 #             X.append(encode(w[i : i + sequence_length]))
 #             Y.append(encode(w[i + sequence_length]))
@@ -36,7 +42,7 @@
 
 
 # def get_vocab_size():
-#     return len(vocab)
+#     return len(vocab) + 2
 
 
 import math
