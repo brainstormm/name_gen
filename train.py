@@ -87,5 +87,5 @@ except Exception as e:
     logging.error("Fatal error occurred during training:")
     logging.error(traceback.format_exc())
     raise
-
 torch.save(model.state_dict(), "model.pth")
+
