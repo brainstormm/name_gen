@@ -1,8 +1,8 @@
 Data Analysis Summary
 ===================
 
-Total number of sequences: 164080
-Vocabulary size: 29
-Sequence length: 3
-Most common characters: [('>', 32033), ('a', 19400), ('n', 16374), ('e', 14803), ('i', 14301), ('l', 10818), ('r', 8852), ('y', 7895), ('s', 5570), ('h', 5215)]
-Least common characters: [('q', 169), ('j', 428), ('f', 444), ('p', 464), ('x', 527), ('w', 530), ('b', 1105), ('z', 1156), ('g', 1220), ('v', 1725)]
+Total number of sequences: 1115361
+Vocabulary size: 65
+Sequence length: 32
+Most common characters: [(' ', 169889), ('e', 94605), ('t', 67007), ('o', 65796), ('a', 55507), ('h', 51310), ('s', 49695), ('r', 48886), ('n', 48528), ('i', 45534)]
+Least common characters: [('$', 1), ('&', 3), ('3', 27), ('X', 112), ('Z', 198), ('Q', 231), ('J', 320), ('z', 355), ('x', 529), ('q', 609)]
