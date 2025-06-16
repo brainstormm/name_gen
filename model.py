@@ -8,7 +8,7 @@ class RNN(torch.nn.Module):
         self.hidden_size = hidden_size
         self.input_size = input_size
         self.output_size = output_size
-        self.rnn = torch.nn.RNN(
+        self.rnn = torch.nn.GRU(
             input_size, hidden_size, batch_first=True, num_layers=num_layers
         )
         self.fc = torch.nn.Linear(hidden_size, output_size)

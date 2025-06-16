@@ -3,9 +3,9 @@ import torch
 torch.manual_seed(1337)
 
 num_layers = 3
-sequence_length = 32
+sequence_length = 4
 batch_size = 4096
-epochs = 50
+epochs = 1000
 hidden_size = 128
 learning_rate = 0.001
 input_size = 1  # The number of dimensions of the input vector. This is 1 because we are just encoding the characters as integers.

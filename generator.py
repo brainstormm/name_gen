@@ -12,7 +12,7 @@ model = load_model(
 )
 
 for j in range(500):
-    seed_string = "A"
+    seed_string = "a"
     generated_text = ""
 
     init_hidden = model.init_hidden(batch_size=1, num_layers=num_layers)

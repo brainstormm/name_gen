@@ -18,6 +18,7 @@ from datetime import datetime
 import traceback
 import sys
 import csv
+from model_analysis import inspect_gradients
 
 # Set up logging
 log_filename = f"training_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
@@ -84,9 +85,15 @@ try:
         num_layers=num_layers,
     )
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-5)
 
     logging.info(f"Starting training for {epochs} epochs with batch size {batch_size}")
+
+    # Early stopping parameters
+    best_val_loss = float('inf')
+    patience = 5  # Number of epochs to wait for improvement
+    patience_counter = 0
+    best_model_state = None
 
     # Lists to store losses
     train_losses = []
@@ -115,6 +122,12 @@ try:
 
                 optimizer.zero_grad()
                 loss.backward()
+
+                if (epoch == 5 or epoch == epochs - 1) and i == 0:
+                    grad_norm = inspect_gradients(model)
+                    logging.info(f"Gradient norm: {grad_norm}")
+
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
                 optimizer.step()
 
                 train_loss += loss.item()
@@ -153,12 +166,34 @@ try:
                 f"Epoch {epoch + 1} - Train Loss: {avg_train_loss:.4f}, Val Loss: {avg_val_loss:.4f}"
             )
 
+            # Early stopping check
+            if avg_val_loss < best_val_loss:
+                best_val_loss = avg_val_loss
+                patience_counter = 0
+                best_model_state = model.state_dict().copy()
+                logging.info(f"New best validation loss: {best_val_loss:.4f}")
+            else:
+                patience_counter += 1
+                logging.info(f"Validation loss did not improve. Patience: {patience_counter}/{patience}")
+                
+                if patience_counter >= patience:
+                    logging.info("Early stopping triggered!")
+                    break
+
         except Exception as e:
             logging.error(f"Error during epoch {epoch + 1}:")
             logging.error(traceback.format_exc())
             raise
 
     logging.info("Training completed!")
+
+    # Save the best model
+    if best_model_state is not None:
+        torch.save(best_model_state, "model.pth")
+        logging.info("Saved best model based on validation loss")
+    else:
+        torch.save(model.state_dict(), "model.pth")
+        logging.info("Saved final model")
 
     # Save losses to CSV
     with open("loss_history.csv", "w", newline="") as f:
@@ -171,5 +206,3 @@ except Exception as e:
     logging.error("Fatal error occurred during training:")
     logging.error(traceback.format_exc())
     raise
-
-torch.save(model.state_dict(), "model.pth")
